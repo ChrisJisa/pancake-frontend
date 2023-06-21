@@ -96,12 +96,12 @@ const HotTokenList: React.FC<{ handleOutputSelect: (newCurrencyOutput: Currency)
     [v3Tokens, chainId, tokenPairs],
   )
 
-  const filterFormattedTokens = useMemo(() => {
+  const filterFormattedV3Tokens = useMemo(() => {
     if (confirmed) {
-      return formattedTokens.filter((token) => token.pairs.length > 0)
+      return formattedV3Tokens.filter((token) => token.pairs.length > 0)
     }
-    return formattedTokens
-  }, [confirmed, formattedTokens])
+    return formattedV3Tokens
+  }, [confirmed, formattedV3Tokens])
 
   const { t } = useTranslation()
   return (
@@ -118,27 +118,29 @@ const HotTokenList: React.FC<{ handleOutputSelect: (newCurrencyOutput: Currency)
           <ButtonMenuItem>{t('Volume (24H)')}</ButtonMenuItem>
         </ButtonMenu>
       </MenuWrapper>
-      <Flex
-        mb="24px"
-        alignItems="center"
-        ml={['20px', '20px', '20px', '20px', '-4px']}
-        onClick={() => setConfirmed(!confirmed)}
-        style={{ cursor: 'pointer' }}
-      >
-        <Checkbox
-          scale="sm"
-          name="confirmed"
-          type="checkbox"
-          checked={confirmed}
-          onChange={() => setConfirmed(!confirmed)}
-        />
-        <Text ml="8px" style={{ userSelect: 'none' }}>
-          {t('Show pairs with trading rewards')}
-        </Text>
-      </Flex>
+      {dataSource === DataSourceType.V3 && (
+        <Flex
+          mb="24px"
+          alignItems="center"
+          ml={['20px', '20px', '20px', '20px', '-4px']}
+          onClick={() => setConfirmed(!confirmed)}
+          style={{ cursor: 'pointer' }}
+        >
+          <Checkbox
+            scale="sm"
+            name="confirmed"
+            type="checkbox"
+            checked={confirmed}
+            onChange={() => setConfirmed(!confirmed)}
+          />
+          <Text ml="8px" style={{ userSelect: 'none' }}>
+            {t('Show pairs with trading rewards')}
+          </Text>
+        </Flex>
+      )}
       {index === 0 ? (
         <TokenTable
-          tokenDatas={dataSource === DataSourceType.V3 ? formattedV3Tokens : filterFormattedTokens}
+          tokenDatas={dataSource === DataSourceType.V3 ? filterFormattedV3Tokens : formattedTokens}
           type={chainId === ChainId.BSC ? 'priceChange' : 'liquidity'}
           defaultSortField={chainId === ChainId.BSC ? 'priceUSDChange' : 'liquidityUSD'}
           maxItems={isMobile ? 100 : 6}
@@ -146,7 +148,7 @@ const HotTokenList: React.FC<{ handleOutputSelect: (newCurrencyOutput: Currency)
         />
       ) : (
         <TokenTable
-          tokenDatas={dataSource === DataSourceType.V3 ? formattedV3Tokens : filterFormattedTokens}
+          tokenDatas={dataSource === DataSourceType.V3 ? filterFormattedV3Tokens : formattedTokens}
           type="volume"
           defaultSortField="volumeUSD"
           maxItems={isMobile ? 100 : 6}
