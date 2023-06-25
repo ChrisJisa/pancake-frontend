@@ -15,6 +15,7 @@
     "no-underscore-dangle": 0,
     "no-continue": 0,
     "lodash/import-scope": [2, "method"],
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }]
     "@next/next/no-img-element": 0,
     "no-sparse-arrays": 0,
     "react-hooks/exhaustive-deps": [
